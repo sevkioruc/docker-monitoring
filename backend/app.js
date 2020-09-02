@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+var exec = require('child_process').exec;
 
 const app = express();
 
@@ -15,7 +16,10 @@ app.use((req, res, next) => {
 
 
 app.get('/api/get', (req, res, next) => {
-  res.status(200).send('Dummy Text');
+  exec('node --version', 'utf8', (err, stdout, stderr) => {
+    console.log(stdout);
+  })
+  res.status(200).send();
 });
 
 module.exports = app;
