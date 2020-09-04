@@ -16,10 +16,9 @@ app.use((req, res, next) => {
 
 
 app.get('/api/get', (req, res, next) => {
-  exec('node --version', 'utf8', (err, stdout, stderr) => {
-    console.log(stdout);
+  exec('sudo docker ps -a', 'utf8', (err, stdout, stderr) => {
+    res.status(200).json({container:stdout});
   })
-  res.status(200).send();
 });
 
 module.exports = app;
