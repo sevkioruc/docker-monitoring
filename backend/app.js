@@ -1,8 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-var exec = require('child_process').exec;
-
+const exec = require('child_process').exec;
+const {getRunningContainersAsJSON} = require('./utils/util');
 const app = express();
+
+const FORMAT="{{.ID}}:{{.Image}}:{{.Command}}:{{.RunningFor}}:{{.Status}}:{{.Names}}:{{.Ports}}:"
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -16,8 +18,9 @@ app.use((req, res, next) => {
 
 
 app.get('/api/get', (req, res) => {
-  exec('sudo docker ps -a', 'utf8', (err, stdout) => {
-    res.status(200).json({container:stdout});
+  exec(`docker ps -a --format ${FORMAT}`, 'utf8', (err, stdout) => {
+    const containerArray = getRunningContainersAsJSON(stdout);
+    res.status(200).json(containerArray);
   })
 });
 
