@@ -15,8 +15,8 @@ app.use((req, res, next) => {
 });
 
 
-app.get('/api/get', (req, res, next) => {
-  exec('sudo docker ps -a', 'utf8', (err, stdout, stderr) => {
+app.get('/api/get', (req, res) => {
+  exec('sudo docker ps -a', 'utf8', (err, stdout) => {
     res.status(200).json({container:stdout});
   })
 });
