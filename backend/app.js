@@ -2,11 +2,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const exec = require('child_process').exec;
 
-const {getAllContainersAsJSON, removeContainerWithID} = require('./utils/util');
+const {getAllContainersAsJSON, getAllImagesAsJSON} = require('./utils/util');
 
 const app = express();
 
-const FORMAT="{{.ID}}:{{.Image}}:{{.Command}}:{{.RunningFor}}:{{.Status}}:{{.Names}}:{{.Ports}}:"
+const FORMAT="{{.ID}}:{{.Image}}:{{.Command}}:{{.RunningFor}}:{{.Status}}:{{.Names}}:{{.Ports}}:";
+const imageFormat="{{.Repository}}:{{.Tag}}:{{.ID}}:{{.CreatedSince}}:{{.Size}}:";
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -29,6 +30,13 @@ app.get('/api/get', (req, res) => {
 app.get('/api/remove/:containerID', (req, res) => {
   exec(`docker container rm ${req.params.containerID}` , 'utf8', (err, stdout) => {
     res.status(200).json({containerID: stdout});
+  })
+});
+
+app.get('/api/get/image', (req, res) => {
+  exec(`docker image ls -a --format ${imageFormat}` , 'utf8', (err, stdout) => {
+    const imageArray = getAllImagesAsJSON(stdout);
+    res.status(200).json(imageArray);
   })
 });
 
