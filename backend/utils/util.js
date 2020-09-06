@@ -1,4 +1,4 @@
-module.exports.getRunningContainersAsJSON = (containers) => {
+module.exports.getAllContainersAsJSON = (containers) => {
     const containerArray = [];
     const interim = containers.split(':');
   
@@ -17,4 +17,4 @@ module.exports.getRunningContainersAsJSON = (containers) => {
     }
   
     return containerArray;
-  }
+}
