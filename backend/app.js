@@ -20,20 +20,20 @@ app.use((req, res, next) => {
 });
 
 
-app.get('/api/get', (req, res) => {
+app.get('/api/getAllContainers', (req, res) => {
   exec(`docker ps -a --format ${FORMAT}`, 'utf8', (err, stdout) => {
     const containerArray = getAllContainersAsJSON(stdout);
     res.status(200).json(containerArray);
   })
 });
 
-app.get('/api/remove/:containerID', (req, res) => {
+app.get('/api/removeContainer/:containerID', (req, res) => {
   exec(`docker container rm ${req.params.containerID}` , 'utf8', (err, stdout) => {
     res.status(200).json({containerID: stdout});
   })
 });
 
-app.get('/api/get/image', (req, res) => {
+app.get('/api/getAllImages', (req, res) => {
   exec(`docker image ls -a --format ${imageFormat}` , 'utf8', (err, stdout) => {
     const imageArray = getAllImagesAsJSON(stdout);
     res.status(200).json(imageArray);
