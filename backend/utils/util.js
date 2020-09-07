@@ -5,7 +5,7 @@ module.exports.getAllContainersAsJSON = (containers) => {
     for (let i = 0; i < (interim.length - 1) / 7; i++) {
       const containerObj = {};
   
-      containerObj.containerID = interim[i*7].replace(/(\r\n|\n|\r)/gm, null);
+      containerObj.containerID = interim[i*7].replace(/(\r\n|\n|\r)/gm, '');
       containerObj.image = interim[i*7 + 1];
       containerObj.command = interim[i*7 + 2];
       containerObj.created = interim[i*7 + 3];
