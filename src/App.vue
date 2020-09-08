@@ -14,7 +14,8 @@ export default {
 
       containers: null,
       images: null,
-      runnigContainers: null
+      runnigContainers: null,
+      stoppedContainers: null
     }
   },
   methods: {
@@ -22,6 +23,11 @@ export default {
       axios.get(`${this.baseURI}/api/getAllContainers`)
         .then((containers) => {
           this.containers = containers.data;
+          this.stoppedContainers = this.containers.filter((container) => !container.status.includes('Up'));
+          this.runnigContainers = this.containers.filter((container) => container.status.includes('Up'));
+
+          this.stoppedContainers.map((container) => container._rowVariant = 'danger');
+          this.runnigContainers.map((container) => container._rowVariant = 'success');
         })
         .catch(() => {
           console('Containers could not fetch');
@@ -42,7 +48,6 @@ export default {
       axios.get(`${this.baseURI}/api/getRunningContainers`)
         .then((runnigContainers) => {
           this.runnigContainers = runnigContainers.data;
-          console.log(this.runnigContainers);
         })
         .catch(() => {
           console.log('Running containers could not fetch');
@@ -50,7 +55,7 @@ export default {
     }
   },
   created() {
-    this.getRunningContainers();
+    this.getAllContainers();
   }
 }
 </script>
