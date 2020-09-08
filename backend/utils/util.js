@@ -1,4 +1,4 @@
-module.exports.getAllContainersAsJSON = (containers) => {
+module.exports.getContainersAsJSON = (containers) => {
     const containerArray = [];
     const interim = containers.split(':');
   

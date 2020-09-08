@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+      <b-table striped hover :items="containers"></b-table>
   </div>
 </template>
 
@@ -11,30 +12,16 @@ export default {
     return {
       baseURI: 'http://localhost:3000',
 
-      containers: [{
-        id: '',
-        image: '',
-        command: '',
-        runningFOr: '',
-        status: '',
-        names: '',
-        ports: ''
-      }],
-
-      images: [{
-        repository: '',
-        tag: '',
-        id: '',
-        createdSince: '',
-        size: ''
-      }]
+      containers: null,
+      images: null,
+      runnigContainers: null
     }
   },
   methods: {
-    getContainers() {
+    getAllContainers() {
       axios.get(`${this.baseURI}/api/getAllContainers`)
         .then((containers) => {
-          console.log(containers);
+          this.containers = containers.data;
         })
         .catch(() => {
           console('Containers could not fetch');
@@ -47,13 +34,23 @@ export default {
           console.log(images);
         })
         .catch(() => {
-          console('Containers could not fetch');
+          console('Images could not fetch');
         });
+    },
+    
+    getRunningContainers() {
+      axios.get(`${this.baseURI}/api/getRunningContainers`)
+        .then((runnigContainers) => {
+          this.runnigContainers = runnigContainers.data;
+          console.log(this.runnigContainers);
+        })
+        .catch(() => {
+          console.log('Running containers could not fetch');
+        })
     }
   },
   created() {
-  /* this.getContainers();*/ 
-    this.getImages();
+    this.getRunningContainers();
   }
 }
 </script>

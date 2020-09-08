@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const exec = require('child_process').exec;
 
-const {getAllContainersAsJSON, getAllImagesAsJSON} = require('./utils/util');
+const {getContainersAsJSON, getAllImagesAsJSON} = require('./utils/util');
 
 const app = express();
 
@@ -22,7 +22,7 @@ app.use((req, res, next) => {
 
 app.get('/api/getAllContainers', (req, res) => {
   exec(`docker ps -a --format ${FORMAT}`, 'utf8', (err, stdout) => {
-    const containerArray = getAllContainersAsJSON(stdout);
+    const containerArray = getContainersAsJSON(stdout);
     res.status(200).json(containerArray);
   })
 });
@@ -37,6 +37,13 @@ app.get('/api/getAllImages', (req, res) => {
   exec(`docker image ls -a --format ${imageFormat}` , 'utf8', (err, stdout) => {
     const imageArray = getAllImagesAsJSON(stdout);
     res.status(200).json(imageArray);
+  })
+});
+
+app.get('/api/getRunningContainers', (req, res) => {
+  exec(`docker ps --format ${FORMAT}`, 'utf8', (err, stdout) => {
+    const containerArray = getContainersAsJSON(stdout);
+    res.status(200).json(containerArray);
   })
 });
 
