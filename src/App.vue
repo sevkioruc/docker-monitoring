@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-      <b-table striped hover :items="containers"></b-table>
+      <b-table class="container-list" striped hover :items="containers"></b-table>
   </div>
 </template>
 
@@ -42,16 +42,6 @@ export default {
         .catch(() => {
           console('Images could not fetch');
         });
-    },
-    
-    getRunningContainers() {
-      axios.get(`${this.baseURI}/api/getRunningContainers`)
-        .then((runnigContainers) => {
-          this.runnigContainers = runnigContainers.data;
-        })
-        .catch(() => {
-          console.log('Running containers could not fetch');
-        })
     }
   },
   created() {
@@ -61,5 +51,7 @@ export default {
 </script>
 
 <style>
-
+  .container-list {
+    width: 60%
+  }
 </style>

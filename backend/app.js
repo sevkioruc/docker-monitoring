@@ -40,11 +40,4 @@ app.get('/api/getAllImages', (req, res) => {
   })
 });
 
-app.get('/api/getRunningContainers', (req, res) => {
-  exec(`docker ps --format ${FORMAT}`, 'utf8', (err, stdout) => {
-    const containerArray = getContainersAsJSON(stdout);
-    res.status(200).json(containerArray);
-  })
-});
-
 module.exports = app;
