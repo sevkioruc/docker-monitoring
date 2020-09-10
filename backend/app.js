@@ -40,4 +40,11 @@ app.get('/api/getAllImages', (req, res) => {
   })
 });
 
+app.post('/api/runContainer', (req, res) => {
+  const containerID = req.body.containerID;
+  exec(`docker container start ${containerID}` , 'utf8', (err, stdout) => {
+    res.status(200).json(stdout);
+  })
+});
+
 module.exports = app;

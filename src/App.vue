@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-      <b-table class="container-list" striped hover :items="containers"></b-table>
+    <b-table striped hover :items="containers" :fields="fields">
+      <template v-slot:cell(running)="container">
+        <b-icon-play-fill class="ml-4 run-button" font-scale="1.5" @click="runContainer(container.item.containerID)"></b-icon-play-fill>
+      </template>
+    </b-table>
   </div>
 </template>
 
@@ -15,7 +19,18 @@ export default {
       containers: null,
       images: null,
       runnigContainers: null,
-      stoppedContainers: null
+      stoppedContainers: null,
+
+      fields: [
+        'containerID',
+        'image',
+        'command',
+        'created',
+        'status',
+        'names',
+        'ports',
+        { key: 'running', label: 'Running' }
+      ],
     }
   },
   methods: {
@@ -42,6 +57,20 @@ export default {
         .catch(() => {
           console('Images could not fetch');
         });
+    },
+
+    runContainer(containerID) {
+      axios.post(`${this.baseURI}/api/runContainer`, {containerID})
+        .then((stdout) => {
+          const index = this.containers.findIndex((container) => container.value.containerID === 'd3861a716ff3');
+          console.log('asdads');
+          if (index !== -1) {
+            this.containers.value[index]._rowVariant = 'success';
+          }
+        })
+        .catch(() => {
+          console.log('Error');
+        });
     }
   },
   created() {
@@ -54,4 +83,9 @@ export default {
   .container-list {
     width: 60%
   }
+
+  .run-button {
+    cursor: pointer;
+  }
+
 </style>
