@@ -2,8 +2,8 @@
   <div id="app">
     <b-table striped hover :items="containers" :fields="fields">
       <template v-slot:cell(running)="container">
-        <b-icon-play-fill v-if="!container.item.isRunning" class="ml-4 run-button" font-scale="1.5" @click="stopContainer(container.item.containerID)"></b-icon-play-fill>
-        <b-icon-stop-fill v-if="container.item.isRunning" class="ml-4 run-button" font-scale="1.5" @click="runContainer(container.item.containerID)"></b-icon-stop-fill>
+        <b-icon-play-fill v-if="!container.item.isRunning" class="ml-4 run-button" font-scale="1.5" @click="runContainer(container.item.containerID)"></b-icon-play-fill>
+        <b-icon-stop-fill v-if="container.item.isRunning" class="ml-4 run-button" font-scale="1.5" @click="stopContainer(container.item.containerID)"></b-icon-stop-fill>
       </template>
     </b-table>
   </div>
@@ -47,7 +47,6 @@ export default {
               container.isRunning = false;
             }
           });
-          console.log(this.containers);
         })
         .catch(() => {
           console('Containers could not fetch');
@@ -71,12 +70,29 @@ export default {
           if (index !== -1) {
             this.$delete(this.containers[index], '_rowVariant');
             this.$set(this.containers[index], '_rowVariant', 'success');
+            this.containers[index].isRunning = true;
+          }
+        })
+        .catch(() => {
+          console.log('Error');
+        });
+    },
+
+    stopContainer(containerID) {
+      axios.post(`${this.baseURI}/api/stopContainer`, {containerID})
+        .then((response) => {
+          const index = this.containers.findIndex((container) => container.containerID === response.data.containerID);          
+          if (index !== -1) {
+            this.$delete(this.containers[index], '_rowVariant');
+            this.$set(this.containers[index], '_rowVariant', 'danger');
+            this.containers[index].isRunning = false;
           }
         })
         .catch(() => {
           console.log('Error');
         });
     }
+
   },
   created() {
     this.getAllContainers();

@@ -51,4 +51,15 @@ app.post('/api/runContainer', (req, res) => {
   })
 });
 
+app.post('/api/stopContainer', (req, res) => {
+  const containerID = req.body.containerID;
+  exec(`docker container stop ${containerID}` , 'utf8', (err, stdout) => {
+    const response = {
+      stdout,
+      containerID
+    };
+    res.status(200).json(response);
+  })
+});
+
 module.exports = app;
