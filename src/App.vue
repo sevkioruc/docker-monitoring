@@ -41,6 +41,7 @@ export default {
           this.stoppedContainers = this.containers.filter((container) => !container.status.includes('Up'));
           this.runnigContainers = this.containers.filter((container) => container.status.includes('Up'));
 
+          this.containers.map((container) => container._rowVariant = null);
           this.stoppedContainers.map((container) => container._rowVariant = 'danger');
           this.runnigContainers.map((container) => container._rowVariant = 'success');
         })
@@ -61,11 +62,11 @@ export default {
 
     runContainer(containerID) {
       axios.post(`${this.baseURI}/api/runContainer`, {containerID})
-        .then((stdout) => {
-          const index = this.containers.findIndex((container) => container.value.containerID === 'd3861a716ff3');
-          console.log('asdads');
+        .then((response) => {
+          const index = this.containers.findIndex((container) => container.containerID === response.data.containerID);          
           if (index !== -1) {
-            this.containers.value[index]._rowVariant = 'success';
+            this.$delete(this.containers[index], '_rowVariant')
+            this.$set(this.containers[index], '_rowVariant', 'success')
           }
         })
         .catch(() => {
