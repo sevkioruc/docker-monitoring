@@ -2,7 +2,8 @@
   <div id="app">
     <b-table striped hover :items="containers" :fields="fields">
       <template v-slot:cell(running)="container">
-        <b-icon-play-fill class="ml-4 run-button" font-scale="1.5" @click="runContainer(container.item.containerID)"></b-icon-play-fill>
+        <b-icon-play-fill v-if="!container.item.isRunning" class="ml-4 run-button" font-scale="1.5" @click="stopContainer(container.item.containerID)"></b-icon-play-fill>
+        <b-icon-stop-fill v-if="container.item.isRunning" class="ml-4 run-button" font-scale="1.5" @click="runContainer(container.item.containerID)"></b-icon-stop-fill>
       </template>
     </b-table>
   </div>
@@ -18,8 +19,6 @@ export default {
 
       containers: null,
       images: null,
-      runnigContainers: null,
-      stoppedContainers: null,
 
       fields: [
         'containerID',
@@ -38,12 +37,17 @@ export default {
       axios.get(`${this.baseURI}/api/getAllContainers`)
         .then((containers) => {
           this.containers = containers.data;
-          this.stoppedContainers = this.containers.filter((container) => !container.status.includes('Up'));
-          this.runnigContainers = this.containers.filter((container) => container.status.includes('Up'));
 
-          this.containers.map((container) => container._rowVariant = null);
-          this.stoppedContainers.map((container) => container._rowVariant = 'danger');
-          this.runnigContainers.map((container) => container._rowVariant = 'success');
+          this.containers.forEach((container) => {
+            if (container.status.includes('Up')) {
+              container._rowVariant = 'success'
+              container.isRunning = true;
+            } else {
+              container._rowVariant = 'danger';
+              container.isRunning = false;
+            }
+          });
+          console.log(this.containers);
         })
         .catch(() => {
           console('Containers could not fetch');
@@ -65,8 +69,8 @@ export default {
         .then((response) => {
           const index = this.containers.findIndex((container) => container.containerID === response.data.containerID);          
           if (index !== -1) {
-            this.$delete(this.containers[index], '_rowVariant')
-            this.$set(this.containers[index], '_rowVariant', 'success')
+            this.$delete(this.containers[index], '_rowVariant');
+            this.$set(this.containers[index], '_rowVariant', 'success');
           }
         })
         .catch(() => {
