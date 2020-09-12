@@ -1,11 +1,18 @@
 <template>
   <div id="app">
-    <b-table striped hover :items="containers" :fields="fields">
-      <template v-slot:cell(running)="container">
-        <b-icon-play-fill v-if="!container.item.isRunning" class="ml-4 run-button" font-scale="1.5" @click="runContainer(container.item.containerID)"></b-icon-play-fill>
-        <b-icon-stop-fill v-if="container.item.isRunning" class="ml-4 run-button" font-scale="1.5" @click="stopContainer(container.item.containerID)"></b-icon-stop-fill>
-      </template>
-    </b-table>
+    <div>
+      <b-table striped hover :items="containers" :fields="fields">
+        <template v-slot:cell(running)="container">
+          <b-icon-play-fill v-if="!container.item.isRunning" class="ml-4 run-button" font-scale="1.5" @click="startContainer(container.item.containerID)"></b-icon-play-fill>
+          <b-icon-stop-fill v-if="container.item.isRunning" class="ml-4 run-button" font-scale="1.5" @click="stopContainer(container.item.containerID)"></b-icon-stop-fill>
+        </template>
+      </b-table>
+    </div>
+
+    <div>
+      <b-table striped hover :items="images" :fields="imageFields">
+      </b-table>
+    </div>
   </div>
 </template>
 
@@ -30,6 +37,15 @@ export default {
         'ports',
         { key: 'running', label: 'Run/Stop' }
       ],
+
+      imageFields: [
+        'repository',
+        'tag',
+        'imageID',
+        'created',
+        'size',
+        {key: 'runContainer', label: 'Run'}
+      ]
     }
   },
   methods: {
@@ -56,15 +72,15 @@ export default {
     getImages() {
       axios.get(`${this.baseURI}/api/getAllImages`)
         .then((images) => {
-          console.log(images);
+          this.images = images.data;
         })
         .catch(() => {
           console('Images could not fetch');
         });
     },
 
-    runContainer(containerID) {
-      axios.post(`${this.baseURI}/api/runContainer`, {containerID})
+    startContainer(containerID) {
+      axios.post(`${this.baseURI}/api/startContainer`, {containerID})
         .then((response) => {
           const cID = response.data.replace('\n', '');
           const index = this.containers.findIndex((container) => container.containerID === cID);          
@@ -98,6 +114,7 @@ export default {
   },
   created() {
     this.getAllContainers();
+    this.getImages();
   }
 }
 </script>
