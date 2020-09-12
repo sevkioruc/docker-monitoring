@@ -28,7 +28,7 @@ export default {
         'status',
         'names',
         'ports',
-        { key: 'running', label: 'Running' }
+        { key: 'running', label: 'Run/Stop' }
       ],
     }
   },
@@ -66,7 +66,8 @@ export default {
     runContainer(containerID) {
       axios.post(`${this.baseURI}/api/runContainer`, {containerID})
         .then((response) => {
-          const index = this.containers.findIndex((container) => container.containerID === response.data.containerID);          
+          const cID = response.data.replace('\n', '');
+          const index = this.containers.findIndex((container) => container.containerID === cID);          
           if (index !== -1) {
             this.$delete(this.containers[index], '_rowVariant');
             this.$set(this.containers[index], '_rowVariant', 'success');
@@ -81,7 +82,8 @@ export default {
     stopContainer(containerID) {
       axios.post(`${this.baseURI}/api/stopContainer`, {containerID})
         .then((response) => {
-          const index = this.containers.findIndex((container) => container.containerID === response.data.containerID);          
+          const cID = response.data.replace('\n', '');
+          const index = this.containers.findIndex((container) => container.containerID === cID);          
           if (index !== -1) {
             this.$delete(this.containers[index], '_rowVariant');
             this.$set(this.containers[index], '_rowVariant', 'danger');
