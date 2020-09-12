@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const exec = require('child_process').exec;
 
 const {getContainersAsJSON, getAllImagesAsJSON} = require('./utils/util');
+const { stdout } = require('process');
 
 const app = express();
 
@@ -40,7 +41,7 @@ app.get('/api/getAllImages', (req, res) => {
   })
 });
 
-app.post('/api/runContainer', (req, res) => {
+app.post('/api/startContainer', (req, res) => {
   const containerID = req.body.containerID;
   exec(`docker container start ${containerID}` , 'utf8', (err, stdout) => {
     res.status(200).json(stdout);
@@ -53,5 +54,12 @@ app.post('/api/stopContainer', (req, res) => {
     res.status(200).json(stdout);
   })
 });
+
+app.post('/api/createContainer', (req, res) => {
+  const imageID = req.body.imageID;
+  exec(`docker container create ${imageID}`, 'utf8', (err, stdout) => {
+    res.status(200).json(stdout);
+  });
+})
 
 module.exports = app;
