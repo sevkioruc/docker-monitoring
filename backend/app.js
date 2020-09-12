@@ -43,22 +43,14 @@ app.get('/api/getAllImages', (req, res) => {
 app.post('/api/runContainer', (req, res) => {
   const containerID = req.body.containerID;
   exec(`docker container start ${containerID}` , 'utf8', (err, stdout) => {
-    const response = {
-      stdout,
-      containerID
-    };
-    res.status(200).json(response);
+    res.status(200).json(stdout);
   })
 });
 
 app.post('/api/stopContainer', (req, res) => {
   const containerID = req.body.containerID;
   exec(`docker container stop ${containerID}` , 'utf8', (err, stdout) => {
-    const response = {
-      stdout,
-      containerID
-    };
-    res.status(200).json(response);
+    res.status(200).json(stdout);
   })
 });
 
