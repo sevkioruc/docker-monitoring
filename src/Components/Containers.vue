@@ -18,9 +18,11 @@ export default {
 				baseURI: 'http://localhost:3000',
 
 				containers: null,
+				images: null,
 
 				fields: [
 					'containerID',
+					'imageName',
 					'image',
 					'command',
 					'created',
@@ -32,25 +34,6 @@ export default {
 			}
     },
     methods: {
-			getAllContainers() {
-				axios.get(`${this.baseURI}/api/getAllContainers`)
-				.then((containers) => {
-					this.containers = containers.data;
-
-					this.containers.forEach((container) => {
-						if (container.status.includes('Up')) {
-							container._rowVariant = 'success'
-							container.isRunning = true;
-						} else {
-								container._rowVariant = 'danger';
-								container.isRunning = false;
-							}
-					});
-				})
-					.catch(() => {
-						console.log('Containers could not fetch');
-					});
-			},
 			startContainer(containerID) {
 				axios.post(`${this.baseURI}/api/startContainer`, {containerID})
         .then((response) => {
@@ -63,7 +46,7 @@ export default {
           }
         })
         .catch(() => {
-          console.log('Error');
+          console.log('Could not start container');
         });
 			},
 			stopContainer(containerID) {
@@ -80,6 +63,29 @@ export default {
         .catch(() => {
           console.log('Could not stop container');
         });
+			},
+			getAllContainers() {
+				axios.all([
+					axios.get(`${this.baseURI}/api/getAllContainers`),
+					axios.get(`${this.baseURI}/api/getAllImages`)
+				])
+				.then(axios.spread((containers, images) => {
+					this.containers = containers.data;
+
+					this.containers.forEach((container) => {
+						const index = images.data.findIndex(image => image.imageID === container.image);
+						if (index !== -1) {
+							container.imageName = images.data[index].repository;
+						}
+						if (container.status.includes('Up')) {
+							container._rowVariant = 'success'
+							container.isRunning = true;
+						} else {
+								container._rowVariant = 'danger';
+								container.isRunning = false;
+							}
+					});
+				}))
 			}
 		},
 		created() {

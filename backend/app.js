@@ -59,6 +59,6 @@ app.post('/api/createContainer', (req, res) => {
   exec(`docker container create ${imageID}`, 'utf8', (err, stdout) => {
     res.status(200).json(stdout);
   });
-})
+});
 
 module.exports = app;
