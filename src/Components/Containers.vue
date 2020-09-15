@@ -63,8 +63,13 @@ export default {
           const index = this.containers.findIndex((container) => container.containerID === cID);          
           if (index !== -1) {
             this.$delete(this.containers[index], '_rowVariant');
-            this.$set(this.containers[index], '_rowVariant', 'danger');
-            this.containers[index].isRunning = false;
+						this.$set(this.containers[index], '_rowVariant', 'danger');
+						this.$set(this.containers[index], 'ports', '');
+
+						this.containers[index].ports = '';
+						this.containers[index].isRunning = false;
+						
+						console.log(this.containers[index]);
           }
         })
         .catch(() => {
