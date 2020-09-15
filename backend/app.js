@@ -61,4 +61,13 @@ app.post('/api/createContainer', (req, res) => {
   });
 });
 
+app.get('/api/getContainer/:containerID', (req, res) => {
+  const containerID = req.params.containerID;
+  exec(`docker ps -a --format ${FORMAT}`, 'utf8', (err, stdout) => {
+    const containerArray = getContainersAsJSON(stdout);
+    const index = containerArray.findIndex(container => container.containerID === containerID);
+    res.status(200).json(containerArray[index]);
+  })
+});
+
 module.exports = app;

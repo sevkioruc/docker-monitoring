@@ -23,7 +23,7 @@ export default {
 				fields: [
 					'containerID',
 					'imageName',
-					'image',
+					{ key: 'image', label: 'imageID' },
 					'command',
 					'created',
 					'status',
@@ -35,15 +35,22 @@ export default {
     },
     methods: {
 			startContainer(containerID) {
-				axios.post(`${this.baseURI}/api/startContainer`, {containerID})
+			axios.post(`${this.baseURI}/api/startContainer`, {containerID})
         .then((response) => {
-						const cID = response.data.replace('\n', '');
-						const index = this.containers.findIndex((container) => container.containerID === cID);          
-						if (index !== -1) {
-							this.$delete(this.containers[index], '_rowVariant');
-							this.$set(this.containers[index], '_rowVariant', 'success');
-							this.containers[index].isRunning = true;
-          }
+						axios.get(`${this.baseURI}/api/getContainer/${containerID}`)
+							.then((newStartedContainer) => {
+								const cID = response.data.replace('\n', '');
+
+								const index = this.containers.findIndex((container) => container.containerID === cID);
+
+								if (index !== -1) {
+									this.$delete(this.containers[index], '_rowVariant');
+									this.$set(this.containers[index], '_rowVariant', 'success');
+									this.$set(this.containers[index], 'ports', newStartedContainer.data.ports)
+									this.containers[index].isRunning = true;
+								}
+
+							})
         })
         .catch(() => {
           console.log('Could not start container');
