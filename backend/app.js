@@ -3,7 +3,6 @@ const bodyParser = require('body-parser');
 const exec = require('child_process').exec;
 
 const {getContainersAsJSON, getAllImagesAsJSON} = require('./utils/util');
-const { stdout } = require('process');
 
 const app = express();
 
