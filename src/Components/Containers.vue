@@ -1,11 +1,36 @@
 <template>
-  <div>
-    <b-table striped hover :items="containers" :fields="fields">
-      <template v-slot:cell(running)="container">
-        <b-icon-play-fill v-if="!container.item.isRunning" class="ml-4 run-button" font-scale="1.5" @click="startContainer(container.item.containerID)"></b-icon-play-fill>
-        <b-icon-stop-fill v-if="container.item.isRunning" class="ml-4 stop-button" font-scale="1.5" @click="stopContainer(container.item.containerID)"></b-icon-stop-fill>
-      </template>
-    </b-table>
+  <div class="col">
+		<div class="row mb-2 remove-button-wrapper">
+			<b-button
+				class="remove-button"
+				size="md"
+				variant="danger"
+				>
+				Sil
+			</b-button>
+			<b-form-checkbox
+				class="select-all"
+				id="selectAll"
+				name="selectAll"
+				value="accepted"
+				unchecked-value="not_accepted"
+			>
+				Hepsini Seç
+			</b-form-checkbox>
+		</div>
+		<div class="row">
+			<b-table 
+			selectable
+			select-mode="multi"
+			@row-selected="onRowSelected"
+			:items="containers"
+			:fields="fields">
+				<template v-slot:cell(running)="container">
+					<b-icon-play-fill v-if="!container.item.isRunning" class="ml-4 run-button" font-scale="1.5" @click="startContainer(container.item.containerID)"></b-icon-play-fill>
+					<b-icon-stop-fill v-if="container.item.isRunning" class="ml-4 stop-button" font-scale="1.5" @click="stopContainer(container.item.containerID)"></b-icon-stop-fill>
+				</template>
+			</b-table>
+		</div>
   </div>
 </template>
 
@@ -20,6 +45,7 @@ export default {
 
 			containers: null,
 			images: null,
+			selectedContainersID: [],
 
 			fields: [
 				'containerID',
@@ -115,6 +141,11 @@ export default {
 			.catch(() => {
 				console.log('Could not fetch container');
 			})
+		},
+		onRowSelected(items) {
+			items.forEach((item) => {
+				this.selectedContainersID.push(item.containerID);
+			});
 		}
 	},
 	created() {
@@ -128,5 +159,18 @@ export default {
 </script>
 
 <style>
-
+	.remove-button-wrapper {
+		position: relative;
+	}
+	.remove-button {
+		position: absolute;
+		right: 0;
+		bottom: 0;
+		width: 80px;
+	}
+	.select-all {
+		position: absolute;
+		right: 100px;
+		bottom: 7px;
+	}
 </style>
