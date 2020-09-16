@@ -37,3 +37,19 @@ module.exports.getAllImagesAsJSON = (images) => {
   
   return imageArray;
 }
+
+module.exports.getStatusOfContainerAsJSON = (status) => {
+  const statusObj = {};
+  const interim = status.split(':');
+
+  statusObj.containerID = interim[0];
+  statusObj.name = interim[1];
+  statusObj.cpuPerc = interim[2];
+  statusObj.memUsage = interim[3];
+  statusObj.netIO = interim[4];
+  statusObj.blockIO = interim[5];
+  statusObj.memPerc = interim[6];
+  statusObj.pIDs = interim[7].replace('\n', '');
+
+  return statusObj;
+}

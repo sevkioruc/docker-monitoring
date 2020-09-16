@@ -2,12 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const exec = require('child_process').exec;
 
-const {getContainersAsJSON, getAllImagesAsJSON} = require('./utils/util');
+const {getContainersAsJSON, getAllImagesAsJSON, getStatusOfContainerAsJSON} = require('./utils/util');
 
 const app = express();
 
 const FORMAT="{{.ID}}:{{.Image}}:{{.Command}}:{{.RunningFor}}:{{.Status}}:{{.Names}}:{{.Ports}}:";
 const imageFormat="{{.Repository}}:{{.Tag}}:{{.ID}}:{{.CreatedSince}}:{{.Size}}:";
+const statsFormat="{{.Container}}:{{.Name}}:{{.CPUPerc}}:{{.MemUsage}}:{{.NetIO}}:{{.BlockIO}}:{{.MemPerc}}:{{.PIDs}}";
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -26,12 +27,6 @@ app.get('/api/getAllContainers', (req, res) => {
     res.status(200).json(containerArray);
   })
 });
-
-/* app.get('/api/removeContainer/:containerID', (req, res) => {
-  exec(`docker container rm ${req.params.containerID}` , 'utf8', (err, stdout) => {
-    res.status(200).json({containerID: stdout});
-  })
-}); */
 
 app.get('/api/getAllImages', (req, res) => {
   exec(`docker image ls -a --format ${imageFormat}` , 'utf8', (err, stdout) => {
@@ -87,7 +82,14 @@ app.post('/api/removeContainers', (req, res) => {
   exec(`docker container rm ${containerIDs.join(' ')}` , 'utf8', () => {
     res.status(200).json(containerIDs);
   })
+});
 
+app.get('/api/getContainerStatus/:containerID', (req, res) => {
+  const containerID = req.params.containerID;
+  exec(`docker container stats --no-stream --format ${statsFormat} ${containerID}`, 'utf8', (err, stdout) => {
+    const statusObj = getStatusOfContainerAsJSON(stdout);
+    res.status(200).json(statusObj);
+  })
 });
 
 module.exports = app;
