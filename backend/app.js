@@ -27,11 +27,11 @@ app.get('/api/getAllContainers', (req, res) => {
   })
 });
 
-app.get('/api/removeContainer/:containerID', (req, res) => {
+/* app.get('/api/removeContainer/:containerID', (req, res) => {
   exec(`docker container rm ${req.params.containerID}` , 'utf8', (err, stdout) => {
     res.status(200).json({containerID: stdout});
   })
-});
+}); */
 
 app.get('/api/getAllImages', (req, res) => {
   exec(`docker image ls -a --format ${imageFormat}` , 'utf8', (err, stdout) => {
@@ -81,4 +81,14 @@ app.get('/api/getImage/:imageID', (req, res) => {
     }
   })
 });
+
+app.post('/api/removeContainers', (req, res) => {
+  console.log(req.body.containerIDs);
+  const containerIDs = req.body.containerIDs.join(' ');
+  exec(`docker container rm ${containerIDs}` , 'utf8', (err, stdout) => {
+    res.status(200).json(stdout);
+  })
+
+});
+
 module.exports = app;

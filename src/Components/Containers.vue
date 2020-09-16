@@ -5,6 +5,7 @@
 				class="remove-button"
 				size="md"
 				variant="danger"
+				@click="removeContainer"
 				>
 				Sil
 			</b-button>
@@ -143,8 +144,15 @@ export default {
 			})
 		},
 		onRowSelected(items) {
+			this.selectedContainersID = [];
 			items.forEach((item) => {
 				this.selectedContainersID.push(item.containerID);
+			});
+		},
+		removeContainer() {
+			axios.post(`${this.baseURI}/api/removeContainers`, {containerIDs: this.selectedContainersID})
+			.then((removedContainerIDs) => {
+				console.log(removedContainerIDs);
 			});
 		}
 	},
