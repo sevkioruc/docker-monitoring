@@ -103,8 +103,13 @@ export default {
 			.then((container) => {
 				axios.get(`${this.baseURI}/api/getImage/${container.data.image}`)
 					.then((image) => {
-						container.imageName = image.repository;
+						container.data.imageName = image.data.repository;
 						this.containers.push(container.data);
+						const index = this.containers.findIndex((c) => c.containerID === container.data.containerID);
+						if (index !== -1) {
+							this.$delete(this.containers[index], '_rowVariant');
+							this.$set(this.containers[index], '_rowVariant', 'danger');
+						}
 					})
 			})
 			.catch(() => {
