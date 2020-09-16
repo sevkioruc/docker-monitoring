@@ -2,7 +2,11 @@
   <div id="app">
     <div class="col">
       <div class="row mb-5">
-        <div class="col-7"></div>
+        <div class="col-7">
+          <!-- 
+            Circle chart will be here
+          -->
+        </div>
         <div class="col-5">          
           <app-images></app-images>
         </div>
@@ -42,14 +46,6 @@ export default {
   .stop-button,
   .create-container-button {
     cursor: pointer;
-  }
-
-  .image-list-wrapper {
-    position: relative;
-  }
-
-  .image-list {
-    position: absolute;
   }
 
 </style>

@@ -13,28 +13,28 @@
 import axios from 'axios';
 
 export default {
-    data() {
-      return {
-				baseURI: 'http://localhost:3000',
+  data() {
+		return {
+			baseURI: 'http://localhost:3000',
 
-				containers: null,
-				images: null,
+			containers: null,
+			images: null,
 
-				fields: [
-					'containerID',
-					'imageName',
-					{ key: 'image', label: 'imageID' },
-					'command',
-					'created',
-					'status',
-					'names',
-					'ports',
-					{ key: 'running', label: 'Run/Stop' }
-				],
-			}
-    },
-    methods: {
-			startContainer(containerID) {
+			fields: [
+				'containerID',
+				'imageName',
+				{ key: 'image', label: 'imageID' },
+				'command',
+				'created',
+				'status',
+				'names',
+				'ports',
+				{ key: 'running', label: 'Run/Stop' }
+			],
+		}
+  },
+  methods: {
+		startContainer(containerID) {
 			axios.post(`${this.baseURI}/api/startContainer`, {containerID})
         .then((response) => {
 						axios.get(`${this.baseURI}/api/getContainer/${containerID}`)
@@ -56,7 +56,7 @@ export default {
           console.log('Could not start container');
         });
 			},
-			stopContainer(containerID) {
+		stopContainer(containerID) {
 				axios.post(`${this.baseURI}/api/stopContainer`, {containerID})
         .then((response) => {
           const cID = response.data.replace('\n', '');
@@ -74,7 +74,7 @@ export default {
           console.log('Could not stop container');
         });
 			},
-			getAllContainers() {
+		getAllContainers() {
 				axios.all([
 					axios.get(`${this.baseURI}/api/getAllContainers`),
 					axios.get(`${this.baseURI}/api/getAllImages`)
@@ -97,10 +97,10 @@ export default {
 					});
 				}))
 			}
-		},
-		created() {
-			this.getAllContainers();
-		}
+	},
+	created() {
+		this.getAllContainers();
+	}
 }
 </script>
 

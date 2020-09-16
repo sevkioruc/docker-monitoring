@@ -2,7 +2,11 @@
   <div>
     <b-table striped hover :items="images" :fields="fields">
       <template v-slot:cell(runContainer)="image">
-        <b-icon-plus-square-fill class="ml-2 create-container-button" @click="createContainer(image.item.imageID)"></b-icon-plus-square-fill>
+        <b-icon-plus-square-fill 
+          class="ml-2 create-container-button"
+          @click="createContainer(image.item.imageID)"
+        >
+        </b-icon-plus-square-fill>
       </template>
     </b-table>
   </div>
@@ -29,7 +33,7 @@ export default {
 		}
 	},
 	methods: {
-		getImages() {
+    getImages() {
       axios.get(`${this.baseURI}/api/getAllImages`)
       .then((images) => {
           this.images = images.data;
@@ -37,8 +41,7 @@ export default {
       .catch(() => {
         console('Images could not fetch');
       });
-		},
-
+    },
     createContainer(imageID) {
       axios.post(`${this.baseURI}/api/createContainer`, {imageID})
       .then((imageID) => {
@@ -48,7 +51,7 @@ export default {
         console.log('Could not create image');
       })
     }
-	},
+  },
 	created() {
 		this.getImages();
 	}
