@@ -83,10 +83,9 @@ app.get('/api/getImage/:imageID', (req, res) => {
 });
 
 app.post('/api/removeContainers', (req, res) => {
-  console.log(req.body.containerIDs);
-  const containerIDs = req.body.containerIDs.join(' ');
-  exec(`docker container rm ${containerIDs}` , 'utf8', (err, stdout) => {
-    res.status(200).json(stdout);
+  const containerIDs = req.body.containerIDs;
+  exec(`docker container rm ${containerIDs.join(' ')}` , 'utf8', () => {
+    res.status(200).json(containerIDs);
   })
 
 });

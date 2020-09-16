@@ -152,7 +152,7 @@ export default {
 		removeContainer() {
 			axios.post(`${this.baseURI}/api/removeContainers`, {containerIDs: this.selectedContainersID})
 			.then((removedContainerIDs) => {
-				console.log(removedContainerIDs);
+					this.containers = this.containers.filter((container) => (removedContainerIDs.data.indexOf(container.containerID) === -1));
 			});
 		}
 	},
