@@ -14,6 +14,7 @@
 
 <script>
 import axios from 'axios';
+import {eventBus} from '../main';
 
 export default {
   data() {
@@ -44,8 +45,8 @@ export default {
     },
     createContainer(imageID) {
       axios.post(`${this.baseURI}/api/createContainer`, {imageID})
-      .then((imageID) => {
-        console.log(imageID);
+      .then((containerID) => {
+        eventBus.$emit('containerID',containerID);
       })
       .catch(() => {
         console.log('Could not create image');

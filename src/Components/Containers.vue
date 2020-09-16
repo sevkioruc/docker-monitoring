@@ -11,6 +11,7 @@
 
 <script>
 import axios from 'axios';
+import {eventBus} from '../main';
 
 export default {
   data() {
@@ -75,30 +76,47 @@ export default {
         });
 			},
 		getAllContainers() {
-				axios.all([
-					axios.get(`${this.baseURI}/api/getAllContainers`),
-					axios.get(`${this.baseURI}/api/getAllImages`)
-				])
-				.then(axios.spread((containers, images) => {
-					this.containers = containers.data;
+			axios.all([
+				axios.get(`${this.baseURI}/api/getAllContainers`),
+				axios.get(`${this.baseURI}/api/getAllImages`)
+			])
+			.then(axios.spread((containers, images) => {
+				this.containers = containers.data;
 
-					this.containers.forEach((container) => {
-						const index = images.data.findIndex(image => image.imageID === container.image);
-						if (index !== -1) {
-							container.imageName = images.data[index].repository;
+				this.containers.forEach((container) => {
+					const index = images.data.findIndex(image => image.imageID === container.image);
+					if (index !== -1) {
+						container.imageName = images.data[index].repository;
+					}
+					if (container.status.includes('Up')) {
+						container._rowVariant = 'success'
+						container.isRunning = true;
+					} else {
+							container._rowVariant = 'danger';
+							container.isRunning = false;
 						}
-						if (container.status.includes('Up')) {
-							container._rowVariant = 'success'
-							container.isRunning = true;
-						} else {
-								container._rowVariant = 'danger';
-								container.isRunning = false;
-							}
-					});
-				}))
-			}
+				});
+			}))
+		},
+		getContainerWithID(containerID) {
+			axios.get(`${this.baseURI}/api/getContainer/${containerID}`)
+			.then((container) => {
+				axios.get(`${this.baseURI}/api/getImage/${container.data.image}`)
+					.then((image) => {
+						container.imageName = image.repository;
+						this.containers.push(container.data);
+					})
+			})
+			.catch(() => {
+				console.log('Could not fetch container');
+			})
+		}
 	},
 	created() {
+		eventBus.$on('containerID', (cID) => {
+			this.getContainerWithID(cID.data);
+		});
+
 		this.getAllContainers();
 	}
 }

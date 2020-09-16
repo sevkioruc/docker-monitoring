@@ -70,4 +70,15 @@ app.get('/api/getContainer/:containerID', (req, res) => {
   })
 });
 
+app.get('/api/getImage/:imageID', (req, res) => {
+  const imageID = req.params.imageID;
+
+  exec(`docker image ls -a --format ${imageFormat}` , 'utf8', (err, stdout) => {
+    const imageArray = getAllImagesAsJSON(stdout);
+    const index = imageArray.findIndex(image => image.imageID === imageID);
+    if (index !== -1) {
+      res.status(200).json(imageArray[index]);
+    }
+  })
+});
 module.exports = app;

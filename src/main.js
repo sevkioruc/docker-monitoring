@@ -9,6 +9,8 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.component(BButton);
 
+export const eventBus = new Vue();
+
 new Vue({
   el: '#app',
   render: h => h(App),
