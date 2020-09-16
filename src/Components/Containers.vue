@@ -68,8 +68,6 @@ export default {
 
 						this.containers[index].ports = '';
 						this.containers[index].isRunning = false;
-						
-						console.log(this.containers[index]);
           }
         })
         .catch(() => {

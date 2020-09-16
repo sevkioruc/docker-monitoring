@@ -57,7 +57,7 @@ app.post('/api/stopContainer', (req, res) => {
 app.post('/api/createContainer', (req, res) => {
   const imageID = req.body.imageID;
   exec(`docker container create ${imageID}`, 'utf8', (err, stdout) => {
-    res.status(200).json(stdout);
+    res.status(200).json(stdout.slice(0,12));
   });
 });
 

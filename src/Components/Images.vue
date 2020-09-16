@@ -41,11 +41,11 @@ export default {
 
     createContainer(imageID) {
       axios.post(`${this.baseURI}/api/createContainer`, {imageID})
-      .then((response) => {
-        console.log(response);
+      .then((imageID) => {
+        console.log(imageID);
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        console.log('Could not create image');
       })
     }
 	},
