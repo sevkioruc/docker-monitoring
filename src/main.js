@@ -10,6 +10,7 @@ Vue.use(IconsPlugin)
 Vue.component(BButton);
 
 export const eventBus = new Vue();
+export const eventBusForStatus = new Vue();
 
 new Vue({
   el: '#app',

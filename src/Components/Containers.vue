@@ -37,7 +37,7 @@
 
 <script>
 import axios from 'axios';
-import {eventBus} from '../main';
+import {eventBus, eventBusForStatus} from '../main';
 
 export default {
   data() {
@@ -148,6 +148,9 @@ export default {
 			items.forEach((item) => {
 				this.selectedContainersID.push(item.containerID);
 			});
+
+			// TODO
+			eventBusForStatus.$emit('containerID', this.selectedContainersID[this.selectedContainersID.length - 1]);
 		},
 		removeContainer() {
 			axios.post(`${this.baseURI}/api/removeContainers`, {containerIDs: this.selectedContainersID})

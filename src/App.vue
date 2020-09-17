@@ -6,6 +6,7 @@
           <!-- 
             Circle chart will be here
           -->
+          <app-status></app-status>
         </div>
         <div class="col-5">          
           <app-images></app-images>
@@ -24,6 +25,7 @@
 
 import containers from './Components/Containers'
 import images from './Components/Images'
+import status from './Components/Status'
 
 export default {
   data () {
@@ -32,7 +34,8 @@ export default {
 	},
 	components: {
 		appContainers: containers,
-		appImages: images
+    appImages: images,
+    appStatus: status
 	}
 }
 </script>

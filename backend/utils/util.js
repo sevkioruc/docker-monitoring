@@ -50,6 +50,6 @@ module.exports.getStatusOfContainerAsJSON = (status) => {
   statusObj.blockIO = interim[5];
   statusObj.memPerc = interim[6];
   statusObj.pIDs = interim[7].replace('\n', '');
-
+  
   return statusObj;
 }
