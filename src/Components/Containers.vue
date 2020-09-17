@@ -149,8 +149,9 @@ export default {
 				this.selectedContainersID.push(item.containerID);
 			});
 
-			// TODO
-			eventBusForStatus.$emit('containerID', this.selectedContainersID[this.selectedContainersID.length - 1]);
+			if (this.selectedContainersID.length > 0) {
+				eventBusForStatus.$emit('containerID', this.selectedContainersID[this.selectedContainersID.length - 1]);
+			}
 		},
 		removeContainer() {
 			axios.post(`${this.baseURI}/api/removeContainers`, {containerIDs: this.selectedContainersID})
