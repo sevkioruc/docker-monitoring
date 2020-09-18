@@ -3,9 +3,6 @@
     <div class="col">
       <div class="row mb-5">
         <div class="col-7">
-          <!-- 
-            Circle chart will be here
-          -->
           <app-status></app-status>
         </div>
         <div class="col-5">          
