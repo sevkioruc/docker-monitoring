@@ -14,32 +14,28 @@ export default {
 		return {
 			baseURI: 'http://localhost:3000',
 
-			status: null,
+			status: {
+				cpuPerc: 0
+			},
 
-			datacollection: null
+			datacollection: null,
+			selectedContainerID: null
 		}
 	},
 	methods: {
 		getStatusOfContainer(containerID) {
-			axios.get(`${this.baseURI}/api/getContainerStatus/${containerID}`)
-			.then((status) => {
-				this.status = status.data;
-			})
-			.catch(() => {
-				console.log('Could not fetch status of container');
-			});
+			return axios.get(`${this.baseURI}/api/getContainerStatus/${containerID}`);
 		},
 		fillData () {
 			this.datacollection = {
 				labels: ['Usage', 'Available'],
 				datasets: [
 					{
-						label: 'Data One',
 						backgroundColor: [
 							'#f87979',
 							'#228B22'
 						],
-						data: [1, 99]
+						data: [parseFloat(this.status.cpuPerc), 100 - parseFloat(this.status.cpuPerc)]
 					}
 				]
 			}
@@ -50,12 +46,23 @@ export default {
 	},
 	created() {
 		eventBusForStatus.$on('containerID', (containerID) => {
-			this.getStatusOfContainer(containerID);
+			try {
+				this.getStatusOfContainer(containerID)
+					.then((status) => {
+						this.status = status.data;
+						this.fillData();
+					})
+					.catch(() => {
+						console.log('Could not fetch status of container');
+					});
+			} catch(e) {
+				console.log(e);
+			}
 		});
 	},
-	mounted () {
-    this.fillData()
-  }
+	mounted() {
+		this.fillData();
+	}
 }
 </script>
 
