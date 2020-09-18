@@ -1,6 +1,11 @@
 <template>
-	<div class="small">
-		<pie-chart :chart-data="datacollection"></pie-chart>
+	<div class="row">
+		<div class="col-3">
+			<pie-chart :chart-data="cpuDataCollection"></pie-chart>
+		</div>
+		<div class="col-3">
+			<pie-chart :chart-data="memoryDataCollection"></pie-chart>
+		</div>
 	</div>
 </template>
 
@@ -15,20 +20,23 @@ export default {
 			baseURI: 'http://localhost:3000',
 
 			status: {
-				cpuPerc: 0
+				cpuPerc: 0,
+				memPerc: 0
 			},
 
-			datacollection: null,
-			selectedContainerID: null
+			selectedContainerID: null,
+
+			cpuDataCollection: null,
+			memoryDataCollection: null
 		}
 	},
 	methods: {
 		getStatusOfContainer(containerID) {
 			return axios.get(`${this.baseURI}/api/getContainerStatus/${containerID}`);
 		},
-		fillData () {
-			this.datacollection = {
-				labels: ['Usage', 'Available'],
+		fillCpuData () {
+			this.cpuDataCollection = {
+				labels: ['CPU', 'Free'],
 				datasets: [
 					{
 						backgroundColor: [
@@ -36,6 +44,20 @@ export default {
 							'#228B22'
 						],
 						data: [parseFloat(this.status.cpuPerc), 100 - parseFloat(this.status.cpuPerc)]
+					}
+				]
+			}
+		},
+		fillMemoryUsage() {
+			this.memoryDataCollection = {
+				labels: ['Memory', 'Free'],
+				datasets: [
+					{
+						backgroundColor: [
+							'#f87979',
+							'#228B22'
+						],
+						data: [parseFloat(this.status.memPerc), 100 - parseFloat(this.status.memPerc)]
 					}
 				]
 			}
@@ -50,7 +72,8 @@ export default {
 				this.getStatusOfContainer(containerID)
 					.then((status) => {
 						this.status = status.data;
-						this.fillData();
+						this.fillCpuData();
+						this.fillMemoryUsage();
 					})
 					.catch(() => {
 						console.log('Could not fetch status of container');
@@ -61,7 +84,8 @@ export default {
 		});
 	},
 	mounted() {
-		this.fillData();
+		this.fillCpuData();
+		this.fillMemoryUsage();
 	}
 }
 </script>
