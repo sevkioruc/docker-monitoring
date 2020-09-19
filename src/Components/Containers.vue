@@ -6,7 +6,7 @@
 				size="md"
 				variant="danger"
 				@click="removeContainer"
-				>
+			>
 				Sil
 			</b-button>
 			<b-form-checkbox
@@ -27,8 +27,20 @@
 			:items="containers"
 			:fields="fields">
 				<template v-slot:cell(running)="container">
-					<b-icon-play-fill v-if="!container.item.isRunning" class="ml-4 run-button" font-scale="1.5" @click="startContainer(container.item.containerID)"></b-icon-play-fill>
-					<b-icon-stop-fill v-if="container.item.isRunning" class="ml-4 stop-button" font-scale="1.5" @click="stopContainer(container.item.containerID)"></b-icon-stop-fill>
+					<b-icon-play-fill 
+						v-if="!container.item.isRunning"
+						class="ml-4 run-button"
+						font-scale="1.5"
+						@click="startContainer(container.item.containerID)"
+					>
+					</b-icon-play-fill>
+					<b-icon-stop-fill 
+						v-if="container.item.isRunning"
+						class="ml-4 stop-button"
+						font-scale="1.5"
+						@click="stopContainer(container.item.containerID)"
+					>
+					</b-icon-stop-fill>
 				</template>
 			</b-table>
 		</div>

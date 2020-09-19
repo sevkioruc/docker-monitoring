@@ -6,6 +6,9 @@
 		<div class="col-3">
 			<pie-chart :chart-data="memoryDataCollection"></pie-chart>
 		</div>
+		<div class="col-3">
+			
+		</div>
 	</div>
 </template>
 
@@ -21,7 +24,9 @@ export default {
 
 			status: {
 				cpuPerc: 0,
-				memPerc: 0
+				memPerc: 0,
+				netIO: '',
+				
 			},
 
 			selectedContainerID: null,
@@ -67,20 +72,18 @@ export default {
 		PieChart
 	},
 	created() {
-		eventBusForStatus.$on('containerID', (containerID) => {
-			try {
-				this.getStatusOfContainer(containerID)
-					.then((status) => {
-						this.status = status.data;
-						this.fillCpuData();
-						this.fillMemoryUsage();
-					})
-					.catch(() => {
-						console.log('Could not fetch status of container');
-					});
-			} catch(e) {
-				console.log(e);
-			}
+		eventBusForStatus.$on('containerID', (containerID) => {		
+		this.getStatusOfContainer(containerID)
+			.then((status) => {
+				this.status = status.data;
+				console.log(this.status)
+				this.fillCpuData();
+				this.fillMemoryUsage();
+				this.fillNetIO();
+			})
+			.catch(() => {
+				console.log('Could not fetch status of container');
+			});
 		});
 	},
 	mounted() {
