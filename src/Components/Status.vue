@@ -51,7 +51,6 @@ export default {
 			],
 
 			selectedContainerID: null,
-
 			cpuDataCollection: null,
 			memoryDataCollection: null
 		}
@@ -97,7 +96,6 @@ export default {
 		this.getStatusOfContainer(containerID)
 			.then((status) => {
 				this.status = status.data;
-				console.log(this.status)
 				this.fillCpuData();
 				this.fillMemoryUsage();
 			})

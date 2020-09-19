@@ -1,26 +1,26 @@
 <template>
   <div class="col">
-		<div class="row mb-2 remove-button-wrapper">
-			<b-button
-				class="remove-button"
-				size="md"
-				variant="danger"
-				@click="removeContainer"
-			>
-				Remove
-			</b-button>
-			<b-form-checkbox
-				class="select-all"
-				id="selectAll"
-				name="selectAll"
-				value="accepted"
-				unchecked-value="not_accepted"
-			>
-				Select All
-			</b-form-checkbox>
-		</div>
-		<div class="row">
-			<b-table 
+	<div class="row mb-2 remove-button-wrapper">
+		<b-button
+			class="remove-button"
+			size="md"
+			variant="danger"
+			@click="removeContainer"
+		>
+			Remove
+		</b-button>
+		<b-form-checkbox
+			class="select-all"
+			id="selectAll"
+			name="selectAll"
+			value="accepted"
+			unchecked-value="not_accepted"
+		>
+			Select All
+		</b-form-checkbox>
+	</div>
+	<div class="row">
+			<b-table
 			selectable
 			select-mode="multi"
 			@row-selected="onRowSelected"
@@ -44,7 +44,7 @@
 				</template>
 			</b-table>
 		</div>
-  </div>
+	</div>
 </template>
 
 <script>

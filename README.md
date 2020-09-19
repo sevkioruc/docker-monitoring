@@ -21,3 +21,4 @@ npm install
 npm run dev
 
 ```
+![alt text](screenshots/ui.png)
