@@ -16,7 +16,7 @@
 				value="accepted"
 				unchecked-value="not_accepted"
 			>
-				Hepsini Seç
+				Select All
 			</b-form-checkbox>
 		</div>
 		<div class="row">
