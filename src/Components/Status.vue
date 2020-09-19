@@ -1,14 +1,24 @@
 <template>
 	<div class="row">
 		<div class="col-3">
-			<pie-chart :chart-data="cpuDataCollection"></pie-chart>
+			<pie-chart 
+				:chart-data="cpuDataCollection"
+			>
+			</pie-chart>
+			<p class="cpu-label">CPU</p>
 		</div>
 		<div class="col-3">
-			<pie-chart :chart-data="memoryDataCollection"></pie-chart>
+			<pie-chart 
+				:chart-data="memoryDataCollection"
+			>
+			</pie-chart>
+			<p class="memory-label">Memory</p>
 		</div>
 		<div class="col-6">
-			<b-table :items="[status]" :fields="fields">
-
+			<b-table 
+				:items="[status]"
+				:fields="fields"
+			>
 			</b-table>
 		</div>
 	</div>
@@ -52,7 +62,7 @@ export default {
 		},
 		fillCpuData () {
 			this.cpuDataCollection = {
-				labels: ['CPU', 'Free'],
+				labels: ['Used', 'Free'],
 				datasets: [
 					{
 						backgroundColor: [
@@ -66,7 +76,7 @@ export default {
 		},
 		fillMemoryUsage() {
 			this.memoryDataCollection = {
-				labels: ['Memory', 'Free'],
+				labels: ['Used', 'Free'],
 				datasets: [
 					{
 						backgroundColor: [
@@ -108,4 +118,11 @@ export default {
     max-width: 250px;
     margin:  20px;
   }
+	.cpu-label,
+	.memory-label {
+		font-family: Arial, Helvetica, sans-serif;
+		text-align: center;
+		font-size: 14px;
+		margin-top: 10px;
+	}
 </style>

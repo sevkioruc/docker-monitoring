@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="col">
+    <div class="col p-5">
       <div class="row mb-5">
         <div class="col-7">
           <app-status></app-status>
@@ -10,7 +10,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-9">
+        <div class="col-12">
           <app-containers></app-containers>
         </div>
       </div>

@@ -7,7 +7,7 @@
 				variant="danger"
 				@click="removeContainer"
 			>
-				Sil
+				Remove
 			</b-button>
 			<b-form-checkbox
 				class="select-all"
