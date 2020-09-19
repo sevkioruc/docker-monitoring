@@ -6,8 +6,10 @@
 		<div class="col-3">
 			<pie-chart :chart-data="memoryDataCollection"></pie-chart>
 		</div>
-		<div class="col-3">
-			
+		<div class="col-6">
+			<b-table :items="[status]" :fields="fields">
+
+			</b-table>
 		</div>
 	</div>
 </template>
@@ -23,11 +25,20 @@ export default {
 			baseURI: 'http://localhost:3000',
 
 			status: {
+				pIDs: null,
 				cpuPerc: 0,
 				memPerc: 0,
+				memUsage: '',
 				netIO: '',
-				
+				blockIO: ''
 			},
+
+			fields: [
+				{key: 'pIDs', label: 'PID'},
+				{key: 'memUsage', label: 'Memory'},
+				'netIO',
+				'blockIO'
+			],
 
 			selectedContainerID: null,
 
@@ -79,7 +90,6 @@ export default {
 				console.log(this.status)
 				this.fillCpuData();
 				this.fillMemoryUsage();
-				this.fillNetIO();
 			})
 			.catch(() => {
 				console.log('Could not fetch status of container');
