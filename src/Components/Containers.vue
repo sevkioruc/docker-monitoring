@@ -9,18 +9,18 @@
 		>
 			Remove
 		</b-button>
-		<b-form-checkbox
-			class="select-all"
-			id="selectAll"
-			name="selectAll"
-			value="accepted"
-			unchecked-value="not_accepted"
+		<b-button
+			class="select-all-button"
+			size="md"
+			variant="danger"
+			@click="selectAllContainer"
 		>
 			Select All
-		</b-form-checkbox>
+		</b-button>
 	</div>
 	<div class="row">
 			<b-table
+			ref="selectableTable"
 			selectable
 			select-mode="multi"
 			@row-selected="onRowSelected"
@@ -160,7 +160,7 @@ export default {
 			items.forEach((item) => {
 				this.selectedContainersID.push(item.containerID);
 			});
-
+			console.log(this.selectedContainersID);
 			if (this.selectedContainersID.length > 0) {
 				eventBusForStatus.$emit('containerID', this.selectedContainersID[this.selectedContainersID.length - 1]);
 			}
@@ -170,6 +170,9 @@ export default {
 			.then((removedContainerIDs) => {
 					this.containers = this.containers.filter((container) => (removedContainerIDs.data.indexOf(container.containerID) === -1));
 			});
+		},
+		selectAllContainer() {
+			this.$refs.selectableTable.selectAllRows();
 		}
 	},
 	created() {
@@ -192,9 +195,9 @@ export default {
 		bottom: 0;
 		width: 80px;
 	}
-	.select-all {
+	.select-all-button {
 		position: absolute;
 		right: 100px;
-		bottom: 7px;
+		bottom: 0;
 	}
 </style>
